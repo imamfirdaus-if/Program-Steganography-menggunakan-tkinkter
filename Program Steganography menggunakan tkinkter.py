@@ -38,7 +38,7 @@ class Steganography:
             frame.destroy()
             self.main(root)
 
-    #Decode Function
+    #Frame Decode
     def frame1_decode(self,f):
         f.destroy()
         d_f2 = Frame(root)
@@ -53,7 +53,8 @@ class Steganography:
         back_button.grid(pady=15)
         back_button.grid()
         d_f2.grid()
-
+    
+    #Frame Decode setelah memilih gambar
     def frame2_decode(self,d_f2):
         d_f3 = Frame(root)
         myfile = tkinter.filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
@@ -86,7 +87,8 @@ class Steganography:
             show_info.grid()
             d_f3.grid(row=1)
             d_f2.destroy()
-
+    
+    #Fungsi decode 
     def decode(self, image):
         data = ''
         imgdata = iter(image.getdata())
@@ -158,8 +160,7 @@ class Steganography:
             encode_button.grid()
             ep.grid(row=1)
             f2.destroy()
-
-
+    
     def info(self):
         try:
             str = 'Gambar Asli:-\nUkuran gambar asli:{}mb\npanjang: {}\nlebar: {}\n\n' \
@@ -171,6 +172,8 @@ class Steganography:
             messagebox.showinfo('info',str)
         except:
             messagebox.showinfo('Gagal mendapatkan informasi')
+    
+    #Fungsi Encode Steganography
     def genData(self,data):
         newd = []
 
@@ -183,12 +186,11 @@ class Steganography:
         lendata = len(datalist)
         imdata = iter(pix)
         for i in range(lendata):
-            # Extracting 3 pixels at a time
+            # Mengekstrak 3 piksel sekaligus
             pix = [value for value in imdata.__next__()[:3] +
                    imdata.__next__()[:3] +
                    imdata.__next__()[:3]]
-            # Pixel value should be made
-            # odd for 1 and even for 0
+            # Membuat nilai piksel menjadi 1 untuk ganjil dan 0 untuk genap
             for j in range(0, 8):
                 if (datalist[i][j] == '0') and (pix[j] % 2 != 0):
 
@@ -197,10 +199,7 @@ class Steganography:
 
                 elif (datalist[i][j] == '1') and (pix[j] % 2 == 0):
                     pix[j] -= 1
-            # Eigh^th pixel of every set tells
-            # whether to stop or read further.
-            # 0 means keep reading; 1 means the
-            # message is over.
+            # Piksel kedelapan dari setiap set memberi tahu apakah akan berhenti atau membaca lebih lanjut. 0 berarti terus membaca, 1 berarti pesan sudah selesai.
             if (i == lendata - 1):
                 if (pix[-1] % 2 == 0):
                     pix[-1] -= 1
@@ -219,7 +218,7 @@ class Steganography:
 
         for pixel in self.modPix(newimg.getdata(), data):
 
-            # Putting modified pixels in the new image
+            # Menempatkan piksel yang dimodifikasi di gambar baru
             newimg.putpixel((x, y), pixel)
             if (x == w - 1):
                 x = 0
