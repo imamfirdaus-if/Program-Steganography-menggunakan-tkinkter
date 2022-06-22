@@ -7,7 +7,7 @@ from tkinter import messagebox
 from io import BytesIO
 import  os
 
-class Stegno:
+class Steganography:
     #main function
     def main(self,root):
         root.title('Image Steganography')
@@ -48,7 +48,7 @@ class Stegno:
         bws_button = Button(d_f2, text='Pilih Gambar', command=lambda :self.frame2_decode(d_f2))
         bws_button.config(font=('quicksand',14))
         bws_button.grid()
-        back_button = Button(d_f2, text='Cancel', command=lambda : Stegno.home(self,d_f2))
+        back_button = Button(d_f2, text='Cancel', command=lambda : Steganography.home(self,d_f2))
         back_button.config(font=('quicksand',14))
         back_button.grid(pady=15)
         back_button.grid()
@@ -106,28 +106,32 @@ class Stegno:
             if pixels[-1] % 2 != 0:
                 return data
 
-    #Frame Encode
+    #Frame Encode pertama
     def frame1_encode(self,f):
         f.destroy()
         f2 = Frame(root)
-        l1= Label(f2,text='Pilih sebuah gambar untuk di encode')
+        l1= Label(f2,text='Pilih gambar untuk di encode')
         l1.config(font=('quicksand',18))
         l1.grid()
         bws_button = Button(f2,text='Pilih gambar',command=lambda : self.frame2_encode(f2))
         bws_button.config(font=('quicksand',14))
         bws_button.grid()
-        back_button = Button(f2, text='Kembali', command=lambda : Stegno.home(self,f2))
+        back_button = Button(f2, text='Kembali', command=lambda : Steganography.home(self,f2))
         back_button.config(font=('quicksand',14))
         back_button.grid(pady=15)
         back_button.grid()
         f2.grid()
 
-
+    #Frame Encode kedua setelah memilih gambar
     def frame2_encode(self,f2):
         ep= Frame(root)
         myfile = tkinter.filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
+        
+        #Notifikasi jika belum memilih gambar
         if not myfile:
             messagebox.showerror("Mohon pilih gambar terlebih dahulu")
+        
+        #Halaman jika gambar telah dipilih
         else:
             myimg = Image.open(myfile)
             myimage = myimg.resize((300,200))
@@ -145,10 +149,10 @@ class Stegno:
             l2.grid(pady=15)
             text_area = Text(ep, width=50, height=10)
             text_area.grid()
-            encode_button = Button(ep, text='Kembali', command=lambda : Stegno.home(self,ep))
+            encode_button = Button(ep, text='Kembali', command=lambda : Steganography.home(self,ep))
             encode_button.config(font=('quicksand',11))
             data = text_area.get("1.0", "end-1c")
-            back_button = Button(ep, text='Encode', command=lambda : [self.enc_fun(text_area,myimg),Stegno.home(self,ep)])
+            back_button = Button(ep, text='Encode', command=lambda : [self.enc_fun(text_area,myimg),Steganography.home(self,ep)])
             back_button.config(font=('quicksand',11))
             back_button.grid(pady=15)
             encode_button.grid()
@@ -158,9 +162,9 @@ class Stegno:
 
     def info(self):
         try:
-            str = 'original image:-\nsize of original image:{}mb\nwidth: {}\nheight: {}\n\n' \
-                  'decoded image:-\nsize of decoded image: {}mb\nwidth: {}' \
-                '\nheight: {}'.format(self.output_image_size.st_size/1000000,
+            str = 'Gambar Asli:-\nUkuran gambar asli:{}mb\npanjang: {}\nlebar: {}\n\n' \
+                  'Gambar hasil decode:-\nUkuran gambar decode: {}mb\npanjang: {}' \
+                '\nlebar: {}'.format(self.output_image_size.st_size/1000000,
                                     self.o_image_w,self.o_image_h,
                                     self.d_image_size/1000000,
                                     self.d_image_w,self.d_image_h)
@@ -235,7 +239,7 @@ class Stegno:
             newimg.save(tkinter.filedialog.asksaveasfilename(initialfile=temp,filetypes = ([('png', '*.png')]),defaultextension=".png"))
             self.d_image_size = my_file.tell()
             self.d_image_w,self.d_image_h = newimg.size
-            messagebox.showinfo("Prsoses encoding berhasil")
+            messagebox.showinfo("info", "Prsoses encoding berhasil")
 
     def page3(self,frame):
         frame.destroy()
@@ -243,7 +247,7 @@ class Stegno:
 
 root = Tk()
 
-o = Stegno()
+o = Steganography()
 o.main(root)
 
 root.mainloop()
